@@ -1,7 +1,7 @@
-PARAMETER o_apoapsis o_compass
+PARAMETER o_apoapsis, o_compass.
 
 run console. // addLog(string), renderScreen, updateHeading(compass, pitch)
-SET s_state to 0. // -1 = terminate 0 = ground, 1 = < 3km, 
+SET s_state to 0. // -1 = terminate 0 = ground, 1 = < 3km,
 					// 2 = < 15km, 3 = apoapsis > 80km, 4 = periapsis < 70km, 5 = end of timewarp
 
 SET t_apoapsis to o_apoapsis.

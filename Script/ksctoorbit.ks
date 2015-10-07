@@ -1,11 +1,11 @@
-PARAMETER o_apoapsis, o_compass.
+PARAMETER o_apoapsis, o_compass. // apoapsis in km, heading
 
 run console. // addLog(string), renderScreen, updateHeading(compass, pitch)
 SET s_state to 0. // -1 = terminate 0 = ground, 1 = < 3km,
 					// 2 = < 15km, 3 = apoapsis > 80km, 4 = periapsis < 70km, 5 = end of timewarp
 
-SET t_apoapsis to o_apoapsis.
-SET t_periapsis to o_apoapsis - 1000. // adjusted by 1km for drift
+SET t_apoapsis to o_apoapsis * 1000.
+SET t_periapsis to t_apoapsis - 1000. // adjusted by 1km for drift
 
 FUNCTION changeHeading {
 	PARAMETER c, p.
@@ -20,10 +20,13 @@ FUNCTION setState {
 	if (s_state = 1 and prev = 0) { // LAUNCH!
 		addLog("Launch!").
 		LOCK THROTTLE TO 1.0. // 1.0 max, 0.0 idle
-		LOCK STEERING TO UP.
+		SAS on.
+		SET SASMODE to "STABILITY".
 		STAGE.
 	}
 	else if (s_state = 2 and prev = 1) { // hit 3km
+		SET SASMODE to "STABILITYASSIST".
+		SAS off.
 		addLog("3km hit. Adjusting heading.").
 		changeHeading(o_compass, 70).
 	}
